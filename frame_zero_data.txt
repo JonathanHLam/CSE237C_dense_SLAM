@@ -17,7 +17,7 @@ scenePose 1, 0, 0, 0
 
 levelId 4
 distThresh
-0.002, 0.004, 0.006, 0.008, 0.01,  
+0.002, 0.004, 0.006, 0.008, 0.01,
 ShortIteration 1
 Rotation Only 1
 Outputs................................
