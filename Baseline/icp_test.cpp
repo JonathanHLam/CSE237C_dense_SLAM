@@ -23,14 +23,14 @@ int main()
 	unsigned char shortIteration = 1;
 	unsigned char rotationOnly = 1;
 
-	float *depth = (float*) malloc(sizeof(float4) * MAX_IMG_X * MAX_IMG_Y);
+	float *depth = (float*) malloc(sizeof(float) * MAX_IMG_X * MAX_IMG_Y);
 	float4 *pointsMap = (float4*) malloc(sizeof(float4) * MAX_IMG_X * MAX_IMG_Y);
 	float4 *normalsMap = (float4*) malloc(sizeof(float4) * MAX_IMG_X * MAX_IMG_Y);
 
 	printf("Depth\n");
 	FILE *fp;
 	fp = fopen("depth.txt","r");
-	for (int i = 0; i < 1240; i++) {
+	for (int i = 0; i < 307200; i++) {
 		float temp;
 		fscanf(fp, "%f", &depth[i]);
 	}
