@@ -66,7 +66,6 @@ struct Mat44_cl {
 	float4 data1;
 	float4 data2;
 	float4 data3;
-
 };
 
 #define KNOB4_INTERPOLATE_POINT      1 // 0: do not interpolate | 1: bilinear interpolation
