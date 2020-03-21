@@ -4,12 +4,14 @@ sceneImageSize 640, 480
 viewIntrinsics 35.8569, 35.8996, 21.6544, 15.5644
 viewImageSize 40, 30
 
-approxInvPose 1, 0, 0, 0
+approxInvPose 
+1, 0, 0, 0
 0, 1, 0, 0
 0, 0, 1, 0
 0, 0, 0, 1
 
-scenePose 1, 0, 0, 0
+scenePose 
+1, 0, 0, 0
 0, 1, 0, 0
 0, 0, 1, 0
 0, 0, 0, 1

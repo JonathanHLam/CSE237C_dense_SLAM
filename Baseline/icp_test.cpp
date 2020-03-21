@@ -30,7 +30,7 @@ int main()
 	printf("Depth\n");
 	FILE *fp;
 	fp = fopen("depth.txt","r");
-	for (int i = 0; i < 1240; i++) {
+	for (int i = 0; i < 307200; i++) {
 		float temp;
 		fscanf(fp, "%f", &depth[i]);
 	}
