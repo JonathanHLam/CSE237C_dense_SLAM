@@ -1,4 +1,5 @@
 #include "icp.h"
+#include <stdio.h>
 
 //#define matVecMul3_2(m, vec) ((float4) (dot((m).data0, (vec)), dot((m).data1, (vec)), dot((m).data2, (vec)), 1.f))
 
@@ -37,9 +38,8 @@ float4 interpolateBilinear_withHoles_OpenCL(
 	if (a.w < 0 || b.w < 0 || c.w < 0 || d.w < 0)
 	{
 		result.x = 0; result.y = 0; result.z = 0; result.w = -1.0f;
-		return result;
 	}
-
+	else {
 	result.x = ((float)a.x * (1.0f - delta.x) * (1.0f - delta.y) + (float)b.x * delta.x * (1.0f - delta.y) +
 		(float)c.x * (1.0f - delta.x) * delta.y + (float)d.x * delta.x * delta.y);
 	result.y = ((float)a.y * (1.0f - delta.x) * (1.0f - delta.y) + (float)b.y * delta.x * (1.0f - delta.y) +
@@ -48,7 +48,7 @@ float4 interpolateBilinear_withHoles_OpenCL(
 		(float)c.z * (1.0f - delta.x) * delta.y + (float)d.z * delta.x * delta.y);
 	result.w = ((float)a.w * (1.0f - delta.x) * (1.0f - delta.y) + (float)b.w * delta.x * (1.0f - delta.y) +
 		(float)c.w * (1.0f - delta.x) * delta.y + (float)d.w * delta.x * delta.y);
-
+	}
 	return result;
 }
 #endif
@@ -236,8 +236,13 @@ void icp (
 	int x = -1, y = 0;
 	for (int xy = 0; xy < viewImageSize.x * viewImageSize.y; xy++)
 #else
-	for (int y = 0; y < viewImageSize.y; y++)
+	for (int y = 0; y < viewImageSize.y; y++) {
+	//for (int y = 0; y < MAX_IMG_Y; y++)	{
+
+#pragma HLS unroll factor=2
 		for (int x = 0; x < viewImageSize.x; x++)
+		//for (int x = 0; x < MAX_IMG_X; x++)
+
 #endif
 #else
 	uchar isValid = 0;
@@ -248,6 +253,7 @@ void icp (
 	int y = get_global_id(1);
 #endif
 		{
+#pragma HLS pipeline
 #if KNOB4_USE_ND_RANGE == 0
 			float localHessian[HESSIAN_SIZE];
 			float localNabla[6];
@@ -262,11 +268,14 @@ void icp (
 
 			float d = depth[xy];
 #else
+
 			float d = depth[x + y * viewImageSize.x];
+			//printf("%d X = %d, Y = %d Depth = %f\n",x+y*viewImageSize.x, x, y, d);
 #endif
 
 			if (d > 1e-8f) //check if valid -- != 0.0f
 			{
+				//printf("2 X = %d, Y = %d d = %f\n", x, y, d);
 				float4 tmp3Dpoint, tmp3Dpoint_reproj;
 				float3 ptDiff;
 				float4 curr3Dpoint, corr3Dnormal;
@@ -658,9 +667,8 @@ void icp (
 					} // if tmp2Dpoint is valid
 				} // if tmp3Dpoint_reproj.z > 0.0f
 			}// if d != 0
-
 		}// x
-	// y
+	}// y
 
 
 	// Store Nabla
